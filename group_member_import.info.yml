@@ -1,0 +1,5 @@
+name: Group Member Import
+type: module
+description: Batch processing a CSV import of group members.
+core: 8.x
+package: Social
