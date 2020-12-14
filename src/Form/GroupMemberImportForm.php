@@ -76,30 +76,6 @@ class GroupMemberImportForm extends FormBase {
       '#value' => $this->t('Start Import'),
     ];
 
-    $form['help'] = array(
-      '#type' => 'details',
-      '#open' => TRUE // Controls the HTML5 'open' attribute. Defaults to FALSE.
-    );
-
-   /* $help_content = [
-      '#theme' => 'item_list',
-      '#list_type' => 'ol',
-      '#title' => t('Required field names and ordering!'),
-      '#items' => ['email | valid email-address',
-                   'status | 1, 0 (1 = active, 0 = blocked)',
-                   'pass | provide a standard password for the user as a fallback option (does not overwrite the password of existing users)',
-                   'field_profile_first_name | provide the first name',
-                   'field_profile_last_name | provide the last name',
-                   'field_profile_organization | provide the organisation name',
-                   'langcode | en, fr, es, bs (en = English, es = Spanish, fr = French, bs = Bosnian)',
-                   'timezone | Africa/Abidjan, Europe/Prague etc. (compare https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)'
-                    ],
-      '#attributes' => ['class' => 'help-csvimport'],
-      '#wrapper_attributes' => ['class' => 'container'],
-    ];
-
-    $form['help']['#markup'] = render($help_content);*/
-
     return $form;
 
   }

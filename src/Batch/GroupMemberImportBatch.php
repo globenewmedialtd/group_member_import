@@ -79,7 +79,7 @@ class GroupMemberImportBatch {
     }
 
     if (!empty($results['group'])) {
-      $redirect_link = '/group/' . $results['group'] . '/membership';
+      $redirect_link = '/group/' . $results['group'] . '/members';
       return new RedirectResponse($redirect_link);
     }
 
