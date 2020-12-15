@@ -55,6 +55,8 @@ class GroupMemberImportForm extends FormBase {
       }
     }    
 
+    $options_user_roles = \Drupal::state()->get('group_member_import_allowed_roles');
+
     
 
    
@@ -84,6 +86,12 @@ class GroupMemberImportForm extends FormBase {
       '#type' => 'checkboxes',
       '#title' => $this->t('Assign group roles'),
       '#options' => $options_group_roles,
+    );
+
+    $form['user_roles'] = array(
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Assign user roles'),
+      '#options' => $options_user_roles,      
     );
 
 

@@ -61,11 +61,9 @@ class GroupMemberImportSettingsForm extends FormBase {
     }
 
 
-    //$test = \Drupal::service('delegatable_roles')->getAssignableRoles($user);
     $allowed_roles = \Drupal::entityQuery('user_role')->condition('is_admin', FALSE)->execute();
 
 
-    //kint($test);
 
     $form['allowed_roles'] = array(
       '#type' => 'checkboxes',
