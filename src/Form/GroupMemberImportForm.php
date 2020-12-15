@@ -47,10 +47,11 @@ class GroupMemberImportForm extends FormBase {
         /** @var  \Drupal\group\Entity\GroupRole $group_role */
         foreach ($group_roles as $role_id => $group_role) {
           if ($group_role->getGroupTypeId() == $group_type->id()) {
-            $options_group_roles[$role_id] = $role_id;
+            if(!$group_role->isInternal()) {
+              $options_group_roles[$role_id] = $group_role->label();           
+            }
           }
         }
-     
       }
     }    
 
