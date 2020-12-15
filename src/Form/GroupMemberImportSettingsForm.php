@@ -37,6 +37,7 @@ class GroupMemberImportSettingsForm extends FormBase {
     $fields = $group_member_import_fields->getAllAvailableFieldsPerEntity();  
 
     $default_values = \Drupal::state()->get('group_member_import_active_fields');
+    $default_values_allowed_roles = \Drupal::state()->get('group_member_import_allowed_roles');
 
     $form['label'] = $this->t('Check all fields you do not want to import.');
 
@@ -59,6 +60,20 @@ class GroupMemberImportSettingsForm extends FormBase {
 
     }
 
+
+    //$test = \Drupal::service('delegatable_roles')->getAssignableRoles($user);
+    $allowed_roles = \Drupal::entityQuery('user_role')->condition('is_admin', FALSE)->execute();
+
+
+    //kint($test);
+
+    $form['allowed_roles'] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Allowed Roles'),
+      '#options' => $allowed_roles,
+      '#default_value' => $default_values_allowed_roles
+    );
+
     $form['submit'] = [
       '#type'  => 'submit',
       '#value' => $this->t('Save'),
@@ -78,10 +93,18 @@ class GroupMemberImportSettingsForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
     $values = $form_state->cleanValues()->getValues();
+    $allowed_roles = $form_state->cleanValues()->getValue('allowed_roles'); 
+
+    foreach ($allowed_roles as $key => $value) {
+      if ($key === $value) {
+        $save_roles[] = $key;
+        \Drupal::state()->set('group_member_import_allowed_roles',$save_roles);
+      }
+    }
 
     foreach ($values as $key => $value) {
 
-      if (is_array($value)) {
+      if (is_array($value) & $key != 'allowed_roles') {
 
         foreach ($value['check'] as $index => $checked) {
 
