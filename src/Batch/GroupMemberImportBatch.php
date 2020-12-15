@@ -101,7 +101,7 @@ class GroupMemberImportBatch {
   /**
    * Process a single line.
    */
-  public static function csvimportImportLine($line, $group, $line_headers, &$context) {
+  public static function csvimportImportLine($line, $group, $group_roles, $line_headers, &$context) {
 
     
     $context['results']['rows_imported']++;
@@ -393,7 +393,7 @@ class GroupMemberImportBatch {
 
     }
 
-    $importUser = $group_member_import_fields->importUser($userArray,$profileArray,$group);
+    $importUser = $group_member_import_fields->importUser($userArray,$profileArray,$group, $group_roles);
 
 
   } 

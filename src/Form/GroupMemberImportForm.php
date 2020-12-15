@@ -35,13 +35,28 @@ class GroupMemberImportForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, GroupInterface $group = null) {
 
+    if (!is_null($group) && is_object($group)) {
+      $current_user = \Drupal::currentUser();
+      $options_group_roles = [];
+      $group_type = $group->getGroupType();
+      $group_roles = \Drupal::entityTypeManager()->getStorage('group_role')->loadMultiple();
+
+      //kint($group_roles);
+
+      if (!empty($group_type) && !empty($group_roles)) {       
+        /** @var  \Drupal\group\Entity\GroupRole $group_role */
+        foreach ($group_roles as $role_id => $group_role) {
+          if ($group_role->getGroupTypeId() == $group_type->id()) {
+            $options_group_roles[$role_id] = $role_id;
+          }
+        }
+     
+      }
+    }    
+
+    
+
    
-
-  
-
-   
-
-
     $form['#attributes'] = [
       'enctype' => 'multipart/form-data',
     ];
@@ -63,6 +78,14 @@ class GroupMemberImportForm extends FormBase {
       '#options' => $options,
       '#title' => $this->t('Delimiter')
     );
+
+    $form['group_roles'] = array(
+      '#type' => 'checkboxes',
+      '#title' => $this->t('Assign group roles'),
+      '#options' => $options_group_roles,
+    );
+
+
 
     $form['group'] = array(
       '#type' => 'entity_autocomplete',
@@ -176,11 +199,22 @@ class GroupMemberImportForm extends FormBase {
 
     $group_member_import_fields = new GroupMemberImportFields();
     $availableFields = $group_member_import_fields->getAllAvailableFields();
+    $active_group_roles = [];
     $newLine = [];
     $header = null;
     $i = 0;
 
     $group = $form_state->getValue('group');
+    
+    $group_roles = $form_state->getValue('group_roles');
+    foreach($group_roles as $key => $role) {
+      if ($key === $role) {
+        $active_group_roles[$key] = $key;
+      }
+    }
+
+
+
     $delimiter = $form_state->getValue('delimiter');
 
     if ($delimiter == 1) {
@@ -230,7 +264,7 @@ class GroupMemberImportForm extends FormBase {
           // processor by stuffing complex objects into it.
           $batch['operations'][] = [
             '\Drupal\group_member_import\Batch\GroupMemberImportBatch::csvimportImportLine',
-            [array_map('base64_encode', $line),$group, $line_headers]
+            [array_map('base64_encode', $line),$group, $active_group_roles, $line_headers]
           ];
 
         }

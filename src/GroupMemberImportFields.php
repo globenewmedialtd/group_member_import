@@ -189,8 +189,15 @@ class GroupMemberImportFields {
 
     }
 
-    public function importUser($userArray, $profileArray, $group) {
+    public function importUser($userArray, $profileArray, $group, $group_roles) {
 
+        $active_group_roles = [];
+
+        if (is_array($group_roles) && !empty($group_roles)) {     
+            $active_group_roles = ['group_roles' => array_keys($group_roles)];
+        }        
+        
+        
         $usermail = FALSE;
         
         //We do not want some fields in our user array        
@@ -228,6 +235,10 @@ class GroupMemberImportFields {
 
                 foreach ($profileArray as $profile_id => $profile_fields) {   
 
+                    //$testing = \Drupal::entityTypeManager()->getStorage('profile');
+
+                   // \Drupal::logger('group_member_import')->notice('<pre><code>' . print_r($testing, TRUE) . '</code></pre>');
+
                     $active_profile = \Drupal::entityTypeManager()
                     ->getStorage('profile')
                     ->loadByUser($current_user, $profile_id);
@@ -249,9 +260,9 @@ class GroupMemberImportFields {
                 }
 
                 // Attach the imported member to his group
-                if($group) {
+                if($group) {                    
                     $group_storage = \Drupal::entityTypeManager()->getStorage('group')->load($group);
-                    $group_storage->addMember($current_user);
+                    $group_storage->addMember($user, $active_group_roles);
                 }
 
             }
@@ -266,6 +277,10 @@ class GroupMemberImportFields {
                 }
 
                 foreach ($profileArray as $profile_id => $profile_fields) {   
+
+                    //$testing = \Drupal::entityTypeManager()->getStorage('profile');
+
+                    //\Drupal::logger('group_member_import')->notice('<pre><code>' . print_r($testing, TRUE) . '</code></pre>');
 
                     $active_profile = \Drupal::entityTypeManager()
                     ->getStorage('profile')
@@ -291,7 +306,7 @@ class GroupMemberImportFields {
 
                 if($group) {
                     $group_storage = \Drupal::entityTypeManager()->getStorage('group')->load($group);
-                    $group_storage->addMember($user);
+                    $group_storage->addMember($user, $active_group_roles);
                 }
           
                 $user->save();
