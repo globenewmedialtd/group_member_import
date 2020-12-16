@@ -229,6 +229,7 @@ class GroupMemberImportFields {
 
                 if (is_array($user_roles) && !empty($user_roles)) {
                     foreach($user_roles as $key => $role) {
+                        if ($key != 'authenticated' || $key != 'anonymous')
                         $user->addRole($key);
                     }
                 }
@@ -320,6 +321,11 @@ class GroupMemberImportFields {
                 if($group) {
                     $group_storage = \Drupal::entityTypeManager()->getStorage('group')->load($group);
                     $group_storage->addMember($user, $active_group_roles);
+                    $group_membership = $group_storage->getMember($user);
+                    $group_membership_roles = $group_membership->getRoles();
+                    //$group->getMember($owner);
+                    \Drupal::logger('group_member_import')->notice('<pre><code>' . print_r($group_membership_roles, TRUE) . '</code></pre>');
+
                 }
           
                 $user->save();

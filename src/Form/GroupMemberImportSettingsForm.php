@@ -62,6 +62,11 @@ class GroupMemberImportSettingsForm extends FormBase {
 
 
     $allowed_roles = \Drupal::entityQuery('user_role')->condition('is_admin', FALSE)->execute();
+    foreach($allowed_roles as $key => $role) {
+      if ($key === 'authenticated' || $key === 'anonymous') {
+        unset($allowed_roles[$key]);
+      }
+    }
 
 
 
