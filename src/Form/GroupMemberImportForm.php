@@ -209,11 +209,13 @@ class GroupMemberImportForm extends FormBase {
     $group_member_import_fields = new GroupMemberImportFields();
     $availableFields = $group_member_import_fields->getAllAvailableFields();
     $active_group_roles = [];
+    $active_user_roles = [];
     $newLine = [];
     $header = null;
     $i = 0;
 
     $group = $form_state->getValue('group');
+    
     
     $group_roles = $form_state->getValue('group_roles');
     foreach($group_roles as $key => $role) {
@@ -222,6 +224,12 @@ class GroupMemberImportForm extends FormBase {
       }
     }
 
+    $user_roles = $form_state->getValue('user_roles');
+    foreach($user_roles as $key => $role) {
+      if ($key === $role) {
+        $active_user_roles[$key] = $key;
+      }
+    }
 
 
     $delimiter = $form_state->getValue('delimiter');
@@ -273,7 +281,7 @@ class GroupMemberImportForm extends FormBase {
           // processor by stuffing complex objects into it.
           $batch['operations'][] = [
             '\Drupal\group_member_import\Batch\GroupMemberImportBatch::csvimportImportLine',
-            [array_map('base64_encode', $line),$group, $active_group_roles, $line_headers]
+            [array_map('base64_encode', $line),$group, $active_group_roles, $active_user_roles, $line_headers]
           ];
 
         }

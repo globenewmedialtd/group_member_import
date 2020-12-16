@@ -189,7 +189,7 @@ class GroupMemberImportFields {
 
     }
 
-    public function importUser($userArray, $profileArray, $group, $group_roles) {
+    public function importUser($userArray, $profileArray, $group, $group_roles, $user_roles) {
 
         $active_group_roles = [];
 
@@ -226,6 +226,13 @@ class GroupMemberImportFields {
                 $user->setUsername($username);
                 $user->setEmail($usermail);
                 $user->set("init", $usermail);
+
+                if (is_array($user_roles) && !empty($user_roles)) {
+                    foreach($user_roles as $key => $role) {
+                        $user->addRole($key);
+                    }
+                }
+
                 $user->enforceIsNew();
                 $user->activate();
                 $user->save();
@@ -273,6 +280,12 @@ class GroupMemberImportFields {
                     // Avoid updating password
                     if ($field_name != 'pass')  {
                         $user->set($field_name,$field_value);
+                    }                    
+                }
+
+                if (is_array($user_roles) && !empty($user_roles)) {
+                    foreach($user_roles as $key => $role) {
+                        $user->addRole($key);
                     }
                 }
 
@@ -407,10 +420,8 @@ class GroupMemberImportFields {
             $definition[] = $field_definition->getName();
 
             if (isset($definition) && !empty($definition)) {
-                foreach ($definition as $field) {   
-                    if (in_array($field,$allowedFields)) {
-                        $columns = 'user.' . $field;
-                    }
+                foreach ($definition as $field) { 
+                    $columns = 'user.' . $field;                  
                 }
             }
 
@@ -450,10 +461,10 @@ class GroupMemberImportFields {
             $definition[] = $field_definition->getName();
 
             if (isset($definition) && !empty($definition)) {
-                foreach ($definition as $field) {     
-                    if (in_array($field,$allowedFields) || strpos($field, 'field_')) {
-                        $columns = 'user.' . $field;
-                    }
+                foreach ($definition as $field) {  
+                    
+                    $columns = 'user.' . $field;
+                   
                 }
             }
 
