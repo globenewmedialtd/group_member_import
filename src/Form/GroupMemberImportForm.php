@@ -57,7 +57,7 @@ class GroupMemberImportForm extends FormBase {
 
     $options_user_roles = \Drupal::state()->get('group_member_import_allowed_roles');
     foreach($options_user_roles as $key => $role) {
-      if ($key == 'authenticated' || $key == 'anonymous') {
+      if ($key === 'authenticated' || $key === 'anonymous') {
         unset($options_user_roles[$key]);
       }
     }
