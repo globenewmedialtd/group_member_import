@@ -60,9 +60,7 @@ class GroupMemberImportForm extends FormBase {
       if ($key === 'authenticated' || $key === 'anonymous') {
         unset($options_user_roles[$key]);
       }
-    }
-
-    
+    }    
 
    
     $form['#attributes'] = [
@@ -235,7 +233,6 @@ class GroupMemberImportForm extends FormBase {
         $active_user_roles[$key] = $key;
       }
     }
-
 
     $delimiter = $form_state->getValue('delimiter');
 

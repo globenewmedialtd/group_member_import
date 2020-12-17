@@ -100,7 +100,7 @@ class GroupMemberImportSettingsForm extends FormBase {
 
     foreach ($allowed_roles as $key => $value) {
       if ($key === $value) {
-        $save_roles[] = $key;
+        $save_roles[$key] = $key;
         \Drupal::state()->set('group_member_import_allowed_roles',$save_roles);
       }
     }

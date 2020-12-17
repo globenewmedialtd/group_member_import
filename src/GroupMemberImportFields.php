@@ -227,7 +227,13 @@ class GroupMemberImportFields {
                 $user->setEmail($usermail);
                 $user->set("init", $usermail);
 
+                \Drupal::logger('group_member_import_test')->notice('<pre><code>' . print_r($user_roles, TRUE) . '</code></pre>');
+
                 if (is_array($user_roles) && !empty($user_roles)) {
+
+                    //\Drupal::state()->get('group_member_import_allowed_roles');
+
+                    
                     foreach($user_roles as $key => $role) {
                         if ($key != 'authenticated' || $key != 'anonymous') {
                             $user->addRole($key);
