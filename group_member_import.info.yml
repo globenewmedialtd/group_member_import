@@ -3,3 +3,7 @@ type: module
 description: Batch processing a CSV import of group members.
 core: 8.x
 package: Social
+dependencies:
+  - group
+  - token
+  - group_buttons_block
