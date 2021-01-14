@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Contains group_member_import.module.
+ */
+
+use Drupal\Core\Url;
+use Drupal\group\Entity\Group;
+use Drupal\group\Entity\GroupInterface;
+
+
+ /**
+  * Implements hook_.
+  */
+
+function group_member_import_group_buttons_add_button_alter(&$buttons) {
+
+    // Get current group so we can build correct links.
+    $group = \Drupal::routeMatch()->getParameter('group');
+
+    if (!is_object($group) && !is_null($group)) {
+
+      $group = \Drupal::entityTypeManager()
+        ->getStorage('group')
+        ->load($group);
+
+    }
+
+    if ($group instanceof GroupInterface) {
+
+        $buttons['import_group_members'] = [
+            '#type' => 'link',
+            '#title' => t('Import Group members'),
+            '#url' => Url::fromRoute('group_member_import.import', ['group' => $group->id()]
+                ),
+            '#attributes' => [
+                'class' => ['group-welcome-message-action-button','button', 'btn','btn-default'],
+            ],
+        ];
+
+    }
+
+}

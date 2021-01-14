@@ -6,7 +6,7 @@ group_member_import.import:
   requirements:
     _custom_access: \Drupal\group_member_import\Form\GroupMemberImportForm::access
 group_member_import.settings:
-  path: '/admin/config/group-member-import/settings'
+  path: '/admin/config/group/group-member-import/settings'
   defaults:
     _form: '\Drupal\group_member_import\Form\GroupMemberImportSettingsForm'
     _title: 'Import Settings'

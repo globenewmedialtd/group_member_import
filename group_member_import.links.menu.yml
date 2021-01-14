@@ -1,0 +1,6 @@
+group_member_import.settings:
+  title: 'Group Member Import Settings'
+  route_name: group_member_import.settings
+  parent: group_buttons_block.admin_config_group
+  description: 'Settings for Group Member Import'
+  weight: 0
