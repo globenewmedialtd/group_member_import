@@ -10,7 +10,7 @@ https://github.com/globenewmedialtd/group_buttons_block
 
 ## How this module works
 
-The Group Member Import Module lets you import all available account fields. It also detects if you are making use of profiles, and is able to import those fields as well. There is no UI to map your fields, you can just use the entity type and field name needed.
+The Group Member Import Module lets you import all available account fields. It also detects if you are making use of profiles, and is able to import those fields as well. There is no UI to map your fields, you can just use the entity type and field name needed as header columns in your csv file.
 
 ### Example of valid header columns
 
