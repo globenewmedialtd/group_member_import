@@ -78,8 +78,18 @@ class GroupMemberImportBatch {
       \Drupal::messenger()->addMessage($message);
     }
 
-    if (!empty($results['group'])) {
+    // Decide where to redirect based on module install
+    $moduleHandler = \Drupal::service('module_handler');
+    // If social distro installed redirect to memberhsip view
+    // otherwise the members view of the group module.
+    if ($moduleHandler->moduleExists('social_group')) {
+      $redirect_link = '/group/' . $results['group'] . '/membership';
+    }
+    else {
       $redirect_link = '/group/' . $results['group'] . '/members';
+    }
+
+    if (!empty($results['group'])) {      
       return new RedirectResponse($redirect_link);
     }
 
@@ -354,47 +364,11 @@ class GroupMemberImportBatch {
           
         }
 
-        
-
-
-
-        
-    
-
-        /*
-        if ($bundle == 'user') {
-
-          
-
-          //$field_type = $group_member_import_fields->getFieldType($field_info[0],'init');
-          //\Drupal::logger('group_member_import')->notice('<pre><code>' . print_r($field_type, TRUE) . '</code></pre>');
-
-        }
-        else {
-
-          
-
-          //$field_type = $group_member_import_fields->getFieldType($field_info[0],$field_info[1]);
-          //\Drupal::logger('group_member_import')->notice('<pre><code>' . print_r($field_type, TRUE) . '</code></pre>');
-
-        }
-
- */
-       
-
-
       }
-
-      
-     
-
-      
-        
 
     }
 
     $importUser = $group_member_import_fields->importUser($userArray,$profileArray,$group, $group_roles, $user_roles);
-
 
   } 
  
