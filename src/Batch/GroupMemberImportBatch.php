@@ -10,6 +10,7 @@ use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\group_member_import\GroupMemberImportFields;
+use Drupal\Component\Utility\Unicode;
 
 
 // @codingStandardsIgnoreEnd
@@ -153,9 +154,11 @@ class GroupMemberImportBatch {
         
         foreach ($line as $line_key => $field_value) {
 
-          if ( $header_key == $line_key ) {
+          if ( $header_key == $line_key ) {   
+            
+            $converted_field_value = Unicode::convertToUtf8($field_value, mb_detect_encoding($field_value));
 
-            $keyLine[$field_name] = trim($field_value);
+            $keyLine[$field_name] = trim($converted_field_value);
 
           }
 
@@ -416,5 +419,7 @@ class GroupMemberImportBatch {
   public static function cleanPassword(string $password) {
     return str_replace(' ','', $password);
   }
+
+
 
 }

@@ -255,7 +255,20 @@ class GroupMemberImportForm extends FormBase {
 
     if ($csvupload = $form_state->getValue('csvupload')) {
 
+      // BOM as a string for comparison.
+      $bom = "\xef\xbb\xbf";
+
+      // Read file from beginning.
+      $handle = fopen($path, 'r');
+
+
       if ($handle = fopen($csvupload, 'r')) {
+
+        // Progress file pointer and get first 3 characters to compare to the BOM string.
+        if (fgets($handle, 4) !== $bom) {
+          // BOM not found - rewind pointer to start of file.
+          rewind($handle);
+        }
 
         $batch['operations'][] = [
           '\Drupal\group_member_import\Batch\GroupMemberImportBatch::csvimportRememberFilename',
@@ -330,6 +343,23 @@ class GroupMemberImportForm extends FormBase {
 
     return AccessResult::forbidden();
 
+  }
+
+    /**
+   * Sanitize the raw content string. Currently supported sanitizations:
+   *
+   * - Remove BOM header from UTF-8 files.
+   *
+   * @param string $raw
+   *   The raw content string to be sanitized.
+   * @return
+   *   The sanitized content as a string.
+   */
+  public function sanitizeRaw($raw) {
+    if (substr($raw, 0,3) == pack('CCC',0xef,0xbb,0xbf)) {
+      $raw = substr($raw, 3);
+    }
+    return $raw;
   }
 
 
