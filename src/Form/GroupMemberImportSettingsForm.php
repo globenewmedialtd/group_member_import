@@ -98,6 +98,9 @@ class GroupMemberImportSettingsForm extends FormBase {
     $values = $form_state->cleanValues()->getValues();
     $allowed_roles = $form_state->cleanValues()->getValue('allowed_roles'); 
 
+    // Delete all current roles, before adding new ones
+    \Drupal::state()->set('group_member_import_allowed_roles',[]);
+
     foreach ($allowed_roles as $key => $value) {
       if ($key === $value) {
         $save_roles[$key] = $key;
